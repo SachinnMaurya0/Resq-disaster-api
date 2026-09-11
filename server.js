@@ -1,4 +1,5 @@
 const express = require("express");
+const rateLimit = require("express-rate-limit");
 
 const app = express();
 app.use(express.json());
@@ -137,11 +138,18 @@ async function fetchWeather(lat, lon) {
     }
 }
 
+const PREDICT_LIMITER = rateLimit({
+    windowMs: 60_000,
+    limit: 20,
+    standardHeaders: "draft-7",
+    legacyHeaders: false,
+});
+
 app.get("/health", (req, res) => {
     res.json({ status: "ok", service: "ResQ Disaster Prediction API" });
 });
 
-app.post("/api/v1/predict", async (req, res) => {
+app.post("/api/v1/predict", PREDICT_LIMITER, async (req, res) => {
     const lat = Number(req.body.latitude);
     const lon = Number(req.body.longitude);
 
