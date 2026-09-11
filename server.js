@@ -167,6 +167,12 @@ app.post("/api/v1/predict", async (req, res) => {
         flood_risk: riskInfo(floodScore),
         cyclone_risk: riskInfo(cycloneScore),
         recommendations: recommendationsFor(floodScore, cycloneScore, temp, description),
+        weather: {
+            temperature: Math.round(temp * 10) / 10,
+            description: description,
+            wind_speed: windSpeed,
+            rain_1h: Math.round(rain * 10) / 10,
+        },
         note: "Risk based on live OpenWeatherMap data at request time.",
     });
 });
