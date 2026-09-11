@@ -5,8 +5,15 @@ app.use(express.json());
 
 const PORT = process.env.PORT || 10000;
 
-const OPEN_WEATHER_API_KEY =
-    process.env.OPENWEATHER_API_KEY || "b1d0120231561761a8fd43d88977ee74";
+const OPEN_WEATHER_API_KEY = process.env.OPENWEATHER_API_KEY;
+
+if (!OPEN_WEATHER_API_KEY) {
+    console.error(
+        "FATAL: OPENWEATHER_API_KEY environment variable is not set. " +
+            "Add it in Render dashboard -> Environment, then redeploy."
+    );
+    process.exit(1);
+}
 
 const LEVEL_COLORS = {
     low: "#22C55E",
